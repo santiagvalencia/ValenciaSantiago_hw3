@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.fftpack import ifft, fft
 
 signal = np.genfromtxt("signal.dat", delimiter = " , ")
 incompletos = np.genfromtxt("incompletos.dat", delimiter = " , ")
@@ -64,21 +63,6 @@ def FT(g, dt):
         if np.fabs(freq[i]) >= 1000:
             G2[i] = 0
 
-    ft = fft(g)
-    for i in range(ft.size):
-        if np.fabs(freq[i]) >= 1000:
-            ft[i] = 0
-
-    plt.plot(freq, np.real(ft))
-    plt.show()
-    plt.close("all")
-
-    signal_filtrada = ifft(ft)
-
-    plt.plot(signal_t, np.real(signal_filtrada))
-    plt.show()
-    plt.close("all")
-
     g2 = np.zeros(N) + 0j
     for ni in range(n):
         sum = 0
@@ -87,19 +71,12 @@ def FT(g, dt):
         g2[ni] = sum
     g2/=n
 
-    if np.allclose(np.real(g2), np.real(signal_filtrada)):
-        print("senales iguales")
-
-
-    plt.plot(signal_t, np.real(signal_filtrada), label = "ifft")
-    plt.plot(signal_t, np.real(g2), label = "propia")
+    plt.plot(signal_t, np.real(g2))
     plt.xlabel("Tiempo (s)")
     plt.ylabel("Amplitud")
     plt.title("Datos filtrados de signal.dat")
-    plt.legend()
-    plt.show()
-
-
+    plt.savefig("ValenciaSantiago_filtrada.pdf")
+    plt.close("all")
 
 
 
