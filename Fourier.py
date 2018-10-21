@@ -7,7 +7,7 @@ incompletos = np.genfromtxt("incompletos.dat", delimiter = " , ")
 signal_Amplitud = signal[:, 1]
 signal_t = signal[:, 0]
 
-plt.plot(signal_Amplitud, signal_t)
+plt.plot(signal_t, signal_Amplitud)
 plt.title("Datos de signal.dat")
 plt.ylabel("Amplitud")
 plt.xlabel("Tiempo")
@@ -45,13 +45,20 @@ def FT(g, dt):
 
     freq/=(dt*n)
 
-    print("\nNo se usa el paquete fftfreq\n")
+    print("\nNo se usa el paquete fftfreq (bono)\n")
     plt.plot(freq, np.real(G))
     plt.title("impl propia")
-    plt.xlabel("Frecuencia")
+    plt.xlabel("Frecuencia (Hz)")
     plt.ylabel("Transformada de Fourier")
     plt.savefig("ValenciaSantiago_TF.pdf")
     plt.close("all")
+
+    print("Frecuencias principales:")
+    G_real = np.real(G)
+    for i in range(G_real.size):
+        if np.fabs(G_real[i]) >= 200 and freq[i]>=0:
+            print (freq[i], " Hz")
+
 
 
 FT(signal_Amplitud, dt)
