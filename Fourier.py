@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.fftpack import ifft, fft
 
 signal = np.genfromtxt("signal.dat", delimiter = " , ")
 incompletos = np.genfromtxt("incompletos.dat", delimiter = " , ")
@@ -10,7 +11,7 @@ signal_t = signal[:, 0]
 plt.plot(signal_t, signal_Amplitud)
 plt.title("Datos de signal.dat")
 plt.ylabel("Amplitud")
-plt.xlabel("Tiempo")
+plt.xlabel("Tiempo (s)")
 plt.savefig("ValenciaSantiago_signal.pdf")
 plt.close("all")
 
@@ -20,8 +21,7 @@ def FT(g, dt):
     N = g.size
     n = N
     k = N
-    G = np.zeros(N)
-    G = G + 0j
+    G = np.zeros(N) + 0j
     for ni in range(n):
         sum = 0
         for ki in range(k):
@@ -47,7 +47,7 @@ def FT(g, dt):
 
     print("\nNo se usa el paquete fftfreq (bono)\n")
     plt.plot(freq, np.real(G))
-    plt.title("impl propia")
+    plt.title("Transformada de Fourier de signal.dat")
     plt.xlabel("Frecuencia (Hz)")
     plt.ylabel("Transformada de Fourier")
     plt.savefig("ValenciaSantiago_TF.pdf")
@@ -58,6 +58,48 @@ def FT(g, dt):
     for i in range(G_real.size):
         if np.fabs(G_real[i]) >= 200 and freq[i]>=0:
             print (freq[i], " Hz")
+
+    G2 = np.copy(G)
+    for i in range(freq.size):
+        if np.fabs(freq[i]) >= 1000:
+            G2[i] = 0
+
+    ft = fft(g)
+    for i in range(ft.size):
+        if np.fabs(freq[i]) >= 1000:
+            ft[i] = 0
+
+    plt.plot(freq, np.real(ft))
+    plt.show()
+    plt.close("all")
+
+    signal_filtrada = ifft(ft)
+
+    plt.plot(signal_t, np.real(signal_filtrada))
+    plt.show()
+    plt.close("all")
+
+    g2 = np.zeros(N) + 0j
+    for ni in range(n):
+        sum = 0
+        for ki in range(k):
+            sum += G2[ki]*np.exp(-1j*2.0*np.pi*ki*ni/N)
+        g2[ni] = sum
+    g2/=n
+
+    if np.allclose(np.real(g2), np.real(signal_filtrada)):
+        print("senales iguales")
+
+
+    plt.plot(signal_t, np.real(signal_filtrada), label = "ifft")
+    plt.plot(signal_t, np.real(g2), label = "propia")
+    plt.xlabel("Tiempo (s)")
+    plt.ylabel("Amplitud")
+    plt.title("Datos filtrados de signal.dat")
+    plt.legend()
+    plt.show()
+
+
 
 
 
