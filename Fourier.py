@@ -16,15 +16,6 @@ plt.close("all")
 
 dt = np.mean(signal_t[1:]-signal_t[:-1])
 
-from scipy.fftpack import fft, fftfreq
-
-n = signal_Amplitud.size # number of point in the whole interval
-#f = 200.0 #  frequency in Hz
-#dt = 1 / (f * 32 ) #32 samples per unit frequency
-t = np.linspace( 0, (n-1)*dt, n)
-
-# SU implementacion de la transformada de fourier
-
 def FT(g, dt):
     N = g.size
     n = N
@@ -54,66 +45,13 @@ def FT(g, dt):
 
     freq/=(dt*n)
 
-    #plt.plot(freq, np.real(G))
-    #plt.title("impl propia")
-    #plt.show()
-    #plt.close("all")
-
-    return freq, G
-
-#print(signal_Amplitud.size)
-
-fpropia, Gpropia = FT(signal_Amplitud, dt)
-
-freq = fftfreq(n, dt) # Recuperamos las frecuencias
-fft_x = fft(signal_Amplitud) # FFT Normalized
-
-if np.allclose(freq, fpropia):
-    print("frec. iguales!")
-
-if np.allclose(np.real(Gpropia), np.real(fft_x)):
-    print("transf. iguales!")
-
-#plt.plot(freq, np.real(fft_x))
-#plt.title("impl numpy")
-#plt.show()
+    print("\nNo se usa el paquete fftfreq\n")
+    plt.plot(freq, np.real(G))
+    plt.title("impl propia")
+    plt.xlabel("Frecuencia")
+    plt.ylabel("Transformada de Fourier")
+    plt.savefig("ValenciaSantiago_TF.pdf")
+    plt.close("all")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#
+FT(signal_Amplitud, dt)
