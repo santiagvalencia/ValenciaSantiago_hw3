@@ -86,11 +86,12 @@ def pasabajas(G, freq, fc):
     for i in range(freq.size):
         if np.fabs(freq[i]) >= fc:
             G2[i] = 0
-    return G2
 
-G2 = pasabajas(G, freq, 1000)
+    g2 = IFT(G2)
 
-g2 = IFT(G2)
+    return g2
+
+g2 = pasabajas(G, freq, 1000)
 
 plt.plot(signal_t, np.real(g2))
 plt.xlabel("Tiempo (s)")
@@ -132,3 +133,28 @@ for p in plots:
     p.set(ylabel = "TDF")
 plt.savefig("ValenciaSantiago_TF_Interpola.pdf")
 plt.close("all")
+
+print("\nLas transformadas de los datos interpolados tienen un mayor ruido en las zonas de alta frecuencia. Ademas, los picos presentes en la frecuencia de 385 Hz en la transformada de signal.dat se encuentran suavizados en las interpolaciones.\n")
+
+cuad_pasabajas_1000 = pasabajas(transf_cuad, frec_interp, 1000)
+cub_pasabajas_1000 = pasabajas(transf_cub, frec_interp, 1000)
+
+pasabajas_500 = pasabajas(G, freq, 500)
+cuad_pasabajas_500 = pasabajas(transf_cuad, frec_interp, 500)
+cub_pasabajas_500 = pasabajas(transf_cub, frec_interp, 500)
+
+fig, plots = plt.subplots(2, sharex = True)
+plots[0].plot(incompletos_interpolacion_t, np.real(cuad_pasabajas_1000), linestyle = "dashed", label = "interp. cuad.")
+plots[0].plot(incompletos_interpolacion_t, np.real(cub_pasabajas_1000), linestyle = "dotted", label = "interp.cub")
+plots[0].plot(signal_t, np.real(g2), linestyle = "-.", label = "signal.dat")
+plots[0].legend()
+plots[0].set_title("Pasabajas 1000 Hz")
+plots[1].plot(incompletos_interpolacion_t, np.real(cuad_pasabajas_500), linestyle = "dashed", label = "interp. cuad.")
+plots[1].plot(incompletos_interpolacion_t, np.real(cub_pasabajas_500), linestyle = "dotted", label = "interp.cub")
+plots[1].plot(signal_t, np.real(pasabajas_500), linestyle = "-.", label = "signal.dat")
+plots[1].legend()
+plots[1].set_title("Pasabajas 500 Hz")
+for p in plots:
+    p.set(ylabel = "Amplitud")
+plt.xlabel("Tiempo (s)")
+plt.savefig("ValenciaSantiago_2Filtros.pdf")
