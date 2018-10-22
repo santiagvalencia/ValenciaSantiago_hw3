@@ -99,9 +99,8 @@ incompletos_t = incompletos[:, 0]
 transfi = FT(incompletos_Amplitud)
 freci = frecuencias(incompletos_t.size, np.mean(incompletos_t[1:]-incompletos_t[:-1]))
 
-
-print(transfi.size)
-print(freci.size)
+plt.plot(freci, np.real(transfi))
+plt.show()
 
 
 
