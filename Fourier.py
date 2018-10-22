@@ -29,6 +29,7 @@ def FT(g):
     return G
 
 def frecuencias(n, dt):
+    n = (int)(n)
     freq = np.zeros(n)
     if n%2 == 0:
         c = -n/2
@@ -39,8 +40,8 @@ def frecuencias(n, dt):
                 freq[i] = c
                 c += 1
     else:
-        freq = np.zeros((int)((n-1)/2))
-        for i in range((int)((n-1)/2)):
+        freq = np.zeros((int)((n-1)/2+1))
+        for i in range((int)((n-1)/2+1)):
                 freq[i] = i
         freq = np.append(freq, -np.flip(freq[1:]))
 
@@ -85,10 +86,68 @@ for i in range(freq.size):
 
 g2 = IFT(G2)
 
-
 plt.plot(signal_t, np.real(g2))
 plt.xlabel("Tiempo (s)")
 plt.ylabel("Amplitud")
 plt.title("Datos filtrados de signal.dat")
 plt.savefig("ValenciaSantiago_filtrada.pdf")
 plt.close("all")
+
+incompletos_Amplitud = incompletos[:, 1]
+incompletos_t = incompletos[:, 0]
+
+transfi = FT(incompletos_Amplitud)
+freci = frecuencias(incompletos_t.size, np.mean(incompletos_t[1:]-incompletos_t[:-1]))
+
+
+print(transfi.size)
+print(freci.size)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#
