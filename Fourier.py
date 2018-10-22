@@ -85,6 +85,8 @@ for i in range(freq.size):
 
 g2 = IFT(G2)
 
+
+
 plt.plot(signal_t, np.real(g2))
 plt.xlabel("Tiempo (s)")
 plt.ylabel("Amplitud")
