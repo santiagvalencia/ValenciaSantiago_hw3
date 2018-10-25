@@ -8,8 +8,6 @@ diagnosticos_str = np.genfromtxt("WDBC.dat", delimiter = "," , dtype = 'str', us
 parametros = datos[:,2:]#guarda los parametros de diagnostico
 nombres = ["radius_mean", "radius_std_error", "radius_worst", "perimeter_mean", "perimeter_std_error", "perimeter_worst" ,"area_mean", "area_std_error", "area_worst", "smoothness_mean", "smoothness_std_error", "smoothness_worst","compactness_mean", "compactness_std_error", "compactness_worst", "concavity_mean", "concavity_std_error", "concavity_worst", "concave_points_mean", "concave_points_std_error", "concave_points_worst", "symmetry_mean", "symmetry_std_error", "symmetry_worst", "fractal_dimension_mean", "fractal_dimension_std_error", "fractal_dimension_worst"]
 
-
-
 for i in range(parametros[0].size): #normaliza los datos para poder aplicar PCA
     parametros[:, i] -= np.mean(parametros[:, i])
     parametros[:, i] /= np.sqrt(np.var(parametros[:, i]))
@@ -59,25 +57,30 @@ PC1 = eigVectors[:, 0].reshape(N, 1)
 PC2 = eigVectors[:, 1].reshape(N, 1)
 #crea la matriz de proyeccion sobre el sistema de coordenadas PC1, PC2
 A = np.hstack((PC1, PC2))
-#Mproy = np.matmul(A, np.matmul(np.linalg.inv(np.matmul(np.transpose(A), A)), np.transpose(A)))
-
+#proyecta los datos al sistema de coordenadas PC1, PC2
 datos_proy = np.matmul(parametros, A)
-#datos_proy = np.matmul(Mproy, np.transpose(parametros))
 cM = 0#contador de diagnostico maligno
 cB = 0#contador de diagnostico benigno
 for i in range(datos_proy[:, 0].size):#recorre los datos proyectados
-    if diagnosticos_str[i] == "B":
-        if cM == 0:
+    if diagnosticos_str[i] == "B":#si el dato es benigno lo colorea de verde
+        if cM == 0:#si no se ha encontrado un dato benigno crea el label correspondiente
             plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "green", alpha = 0.3, label = "Benigno", marker = "+")
             cM+=1
         else: plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "green", alpha = 0.3, marker = "+")
-    else:
-        if cB == 0:
+    else:#si el dato es maligno lo colorea de rojo
+        if cB == 0:#si no se ha encontrado un dato maligno crea el label correspondiente
             plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "red", alpha = 0.3, label = "Maligno", marker = "+")
             cB+=1
         else: plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "red", alpha = 0.3, marker = "+")
+x = np.linspace(-5, 10, 100)
+plt.plot(x, 1.5*x-0.5, linestyle = "--", color = "grey")
 plt.legend()
 plt.xlabel("PC1")
 plt.ylabel("PC2")
 plt.title("PCA aplicado a los datos")
-plt.show()
+plt.savefig("ValenciaSantiago_PCA.pdf")
+plt.close("all")
+
+print("El metodo PCA es util para clasificar los diagnosticos, ya que, como se ve en la grafica, los datos proyectados muestran un patron claro que separa los diagnosticos malignos y benignos.")
+print("Se puede trazar la linea PC2 = 1.5*PC1-0.5 para separar la mayoria de los diagnosticos")
+print("Sin embargo, algunos de los datos no siguen este patron, por lo que el metodo PCA puede ser util para una primera aproximacion al diagnostico pero no como una herramienta definitiva.")
