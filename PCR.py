@@ -6,6 +6,9 @@ datos = np.genfromtxt("WDBC.dat", delimiter = ",")
 diagnosticos_str = np.genfromtxt("WDBC.dat", delimiter = "," , dtype = 'str', usecols = (1))
 
 parametros = datos[:,2:]#guarda los parametros de diagnostico
+nombres = ["radius_mean", "radius_std_error", "radius_worst", "perimeter_mean", "perimeter_std_error", "perimeter_worst" ,"area_mean", "area_std_error", "area_worst", "smoothness_mean", "smoothness_std_error", "smoothness_worst","compactness_mean", "compactness_std_error", "compactness_worst", "concavity_mean", "concavity_std_error", "concavity_worst", "concave_points_mean", "concave_points_std_error", "concave_points_worst", "symmetry_mean", "symmetry_std_error", "symmetry_worst", "fractal_dimension_mean", "fractal_dimension_std_error", "fractal_dimension_worst"]
+
+
 
 for i in range(parametros[0].size): #normaliza los datos para poder aplicar PCA
     parametros[:, i] -= np.mean(parametros[:, i])
@@ -48,18 +51,18 @@ for i in range(eigValues.size):
             eigVectors[:, j] = temp_vect
             numeros[j] = temp_num
 print("\n")#imprime los dos vectores propios correspondientes a los dos mayores valores propios
-print("Componente principal 1: vector", numeros[0], "= ", eigVectors[:, 0].reshape(N, 1), " correspondiente al valor propio", eigValues[0])
-print("Componente principal 2: vector", numeros[1], "= ", eigVectors[:, 1].reshape(N, 1), " correspondiente al valor propio", eigValues[1])
+print("Componente principal 1: vector", numeros[0], "= \n", eigVectors[:, 0].reshape(N, 1), " correspondiente al valor propio", eigValues[0], " y al parametro ", nombres[numeros[0]-1])
+print("Componente principal 2: vector", numeros[1], "= \n", eigVectors[:, 1].reshape(N, 1), " correspondiente al valor propio", eigValues[1], " y al parametro ", nombres[numeros[1]-1])
 print("\n")
 #guarda los componentes principales en sus propias variables
 PC1 = eigVectors[:, 0].reshape(N, 1)
 PC2 = eigVectors[:, 1].reshape(N, 1)
-#crea la matriz de proyeccion sobre el plano PC1, PC2
+#crea la matriz de proyeccion sobre el sistema de coordenadas PC1, PC2
 A = np.hstack((PC1, PC2))
 #Mproy = np.matmul(A, np.matmul(np.linalg.inv(np.matmul(np.transpose(A), A)), np.transpose(A)))
 
 datos_proy = np.matmul(parametros, A)
-print("\n",datos_proy,"\n")
+#datos_proy = np.matmul(Mproy, np.transpose(parametros))
 cM = 0#contador de diagnostico maligno
 cB = 0#contador de diagnostico benigno
 for i in range(datos_proy[:, 0].size):#recorre los datos proyectados
@@ -74,33 +77,7 @@ for i in range(datos_proy[:, 0].size):#recorre los datos proyectados
             cB+=1
         else: plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "red", alpha = 0.3, marker = "+")
 plt.legend()
+plt.xlabel("PC1")
+plt.ylabel("PC2")
+plt.title("PCA aplicado a los datos")
 plt.show()
-
-
-"""from sklearn.decomposition import PCA as sklearnPCA
-sklearn_pca = sklearnPCA(n_components=2)
-Y_sklearn = sklearn_pca.fit_transform(parametros)
-
-traces = []
-
-for name in ('Iris-setosa', 'Iris-versicolor', 'Iris-virginica'):
-
-    trace = Scatter(
-        x=Y_sklearn[y==name,0],
-        y=Y_sklearn[y==name,1],
-        mode='markers',
-        name=name,
-        marker=Marker(
-            size=12,
-            line=Line(
-                color='rgba(217, 217, 217, 0.14)',
-                width=0.5),
-            opacity=0.8))
-    traces.append(trace)
-
-
-data = Data(traces)
-layout = Layout(xaxis=XAxis(title='PC1', showline=False),
-                yaxis=YAxis(title='PC2', showline=False))
-fig = Figure(data=data, layout=layout)
-py.iplot(fig)"""
