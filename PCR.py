@@ -21,5 +21,5 @@ for i in range(N):
     for j in range(N):
         Mcov[i, j] = cov(parametros[:, i], parametros[:, j])
 
-
-print(Mcov)
+Mcov_np = np.cov(parametros, rowvar = False)
+print(np.allclose(Mcov, Mcov_np))
