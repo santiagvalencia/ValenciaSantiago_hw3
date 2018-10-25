@@ -3,13 +3,6 @@ import matplotlib.pyplot as plt
 
 datos = np.genfromtxt("WDBC.dat", delimiter = ",")
 diagnosticos_str = np.genfromtxt("WDBC.dat", delimiter = "," , dtype = 'str', usecols = (1))
-diagnosticos = np.zeros(diagnosticos_str.size)
-for i in range(diagnosticos_str.size):
-    if diagnosticos_str[i] == "B":
-        datos[i, 1] = 1
-        diagnosticos[i] = 1
-    else:
-        datos[i, 1] = 0
 
 parametros = datos[:,2:]
 
@@ -62,20 +55,20 @@ PC2 = eigVectors[1]
 
 Mproy = np.hstack((PC1.reshape(N, 1), PC2.reshape(N, 1)))
 
-Y = np.matmul(parametros, Mproy)
+datos_proy = np.matmul(parametros, Mproy)
 
 cM = 0
 cB = 0
-for i in range(Y[:, 0].size):
-    if diagnosticos[i] == 1:
+for i in range(datos_proy[:, 0].size):
+    if diagnosticos_str[i] == "B":
         if cM == 0:
-            plt.scatter(Y[i, 0], Y[i, 1], color = "green", alpha = 0.3, label = "Benigno", marker = "+")
+            plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "green", alpha = 0.3, label = "Benigno", marker = "+")
             cM+=1
-        else: plt.scatter(Y[i, 0], Y[i, 1], color = "green", alpha = 0.3, marker = "+")
+        else: plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "green", alpha = 0.3, marker = "+")
     else:
         if cB == 0:
-            plt.scatter(Y[i, 0], Y[i, 1], color = "red", alpha = 0.3, label = "Maligno", marker = "+")
+            plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "red", alpha = 0.3, label = "Maligno", marker = "+")
             cB+=1
-        else: plt.scatter(Y[i, 0], Y[i, 1], color = "red", alpha = 0.3, marker = "+")
+        else: plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "red", alpha = 0.3, marker = "+")
 plt.legend()
 plt.show()
