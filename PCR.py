@@ -15,6 +15,7 @@ parametros = datos[:,2:]
 
 for i in range(parametros[0].size):
     parametros[:, i] -= np.mean(parametros[:, i])
+    parametros[:, i] /= np.sqrt(np.var(parametros[:, i]))
 
 N = parametros[0].size #numero de parametros (sin numero de indentificacion ni diagnostico)
 
@@ -34,10 +35,9 @@ eigValues, eigVectors = np.linalg.eig(Mcov)
 
 print("\n")
 for i in range(eigValues.size):
-    if i == 0 or i == 1:
-        print("valor propio",i+1, ":", eigValues[i])
-        print("vector propio",i+1,":", eigVectors[i])
-        print("\n")
+    print("valor propio",i+1, ":", eigValues[i])
+    print("vector propio",i+1,":", eigVectors[i])
+    print("\n")
 
 #ordena valores propios y sus correspondientes vectores propios
 for i in range(eigValues.size):
@@ -55,6 +55,7 @@ for i in range(eigValues.size):
 print("\n")
 print("Componente principal 1: vector", numeros[0], "= ", eigVectors[0], " correspondiente al valor propio", eigValues[0])
 print("Componente principal 2: vector", numeros[1], "= ", eigVectors[1], " correspondiente al valor propio", eigValues[1])
+print("\n")
 
 PC1 = eigVectors[0]
 PC2 = eigVectors[1]
@@ -63,8 +64,18 @@ Mproy = np.hstack((PC1.reshape(N, 1), PC2.reshape(N, 1)))
 
 Y = np.matmul(parametros, Mproy)
 
+cM = 0
+cB = 0
 for i in range(Y[:, 0].size):
     if diagnosticos[i] == 1:
-        plt.scatter(Y[i, 0], Y[i, 1], color = "green")
-    else: plt.scatter(Y[i, 0], Y[i, 1], color = "red")
+        if cM == 0:
+            plt.scatter(Y[i, 0], Y[i, 1], color = "green", alpha = 0.3, label = "Benigno", marker = "+")
+            cM+=1
+        else: plt.scatter(Y[i, 0], Y[i, 1], color = "green", alpha = 0.3, marker = "+")
+    else:
+        if cB == 0:
+            plt.scatter(Y[i, 0], Y[i, 1], color = "red", alpha = 0.3, label = "Maligno", marker = "+")
+            cB+=1
+        else: plt.scatter(Y[i, 0], Y[i, 1], color = "red", alpha = 0.3, marker = "+")
+plt.legend()
 plt.show()
