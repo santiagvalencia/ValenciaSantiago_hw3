@@ -53,7 +53,11 @@ print("\n")
 PC1 = eigVectors[0]
 PC2 = eigVectors[1]
 
-Mproy = np.hstack((PC1.reshape(N, 1), PC2.reshape(N, 1)))
+Mproy = np.matmul(np.hstack((PC1.reshape(N, 1), PC2.reshape(N, 1))) , np.vstack((PC1, PC2)))
+#Mproy2 = np.vstack((PC1, PC2))
+
+print(np.allclose(Mproy, np.matmul(Mproy, Mproy)))
+print("\n")
 
 datos_proy = np.matmul(parametros, Mproy)
 
