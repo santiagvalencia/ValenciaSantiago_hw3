@@ -6,7 +6,10 @@ diagnosticos_str = np.genfromtxt("WDBC.dat", delimiter = "," , dtype = 'str', us
 diagnosticos = np.zeros(diagnosticos_str.size)
 for i in range(diagnosticos_str.size):
     if diagnosticos_str[i] == "B":
+        datos[i, 1] = 1
         diagnosticos[i] = 1
+    else:
+        datos[i, 1] = 0
 
 parametros = datos[:,2:]
 
@@ -20,6 +23,11 @@ def cov(x, y):
 for i in range(N):
     for j in range(N):
         Mcov[i, j] = cov(parametros[:, i], parametros[:, j])
+print(Mcov)
 
-Mcov_np = np.cov(parametros, rowvar = False)
-print(np.allclose(Mcov, Mcov_np))
+eigValues, eigVectors = np.linalg.eig(Mcov)
+
+for i in range(eigValues.size):
+    print("valor propio",i+1, ":", eigValues[i])
+    print("vector propio",i+1,":", eigVectors[i])
+    print("\n")
