@@ -6,7 +6,7 @@ datos = np.genfromtxt("WDBC.dat", delimiter = ",")
 diagnosticos_str = np.genfromtxt("WDBC.dat", delimiter = "," , dtype = 'str', usecols = (1))
 
 parametros = datos[:,2:]#guarda los parametros de diagnostico
-nombres = ["radius_mean", "radius_std_error", "radius_worst", "perimeter_mean", "perimeter_std_error", "perimeter_worst" ,"area_mean", "area_std_error", "area_worst", "smoothness_mean", "smoothness_std_error", "smoothness_worst","compactness_mean", "compactness_std_error", "compactness_worst", "concavity_mean", "concavity_std_error", "concavity_worst", "concave_points_mean", "concave_points_std_error", "concave_points_worst", "symmetry_mean", "symmetry_std_error", "symmetry_worst", "fractal_dimension_mean", "fractal_dimension_std_error", "fractal_dimension_worst"]
+nombres = ["radius_mean", "radius_std_error", "radius_worst", "texture_mean", "texture_std_error", "texture_worst", "perimeter_mean", "perimeter_std_error", "perimeter_worst" ,"area_mean", "area_std_error", "area_worst", "smoothness_mean", "smoothness_std_error", "smoothness_worst","compactness_mean", "compactness_std_error", "compactness_worst", "concavity_mean", "concavity_std_error", "concavity_worst", "concave_points_mean", "concave_points_std_error", "concave_points_worst", "symmetry_mean", "symmetry_std_error", "symmetry_worst", "fractal_dimension_mean", "fractal_dimension_std_error", "fractal_dimension_worst"]
 
 for i in range(parametros[0].size): #normaliza los datos para poder aplicar PCA
     parametros[:, i] -= np.mean(parametros[:, i])
@@ -49,15 +49,39 @@ for i in range(eigValues.size):
             eigVectors[:, j] = temp_vect
             numeros[j] = temp_num
 print("\n")#imprime los dos vectores propios correspondientes a los dos mayores valores propios
-print("Componente principal 1: vector", numeros[0], "= \n", eigVectors[:, 0].reshape(N, 1), " correspondiente al valor propio", eigValues[0], " y al parametro ", nombres[numeros[0]-1])
+print("Componente principal 1: vector", numeros[0], "= \n", eigVectors[:, 0].reshape(N, 1), " correspondiente al valor propio", eigValues[0])
 print("\n")
-print("Componente principal 2: vector", numeros[1], "= \n", eigVectors[:, 1].reshape(N, 1), " correspondiente al valor propio", eigValues[1], " y al parametro ", nombres[numeros[1]-1])
+print("Componente principal 2: vector", numeros[1], "= \n", eigVectors[:, 1].reshape(N, 1), " correspondiente al valor propio", eigValues[1])
 print("\n")
 #guarda los componentes principales en sus propias variables
 PC1 = eigVectors[:, 0].reshape(N, 1)
 PC2 = eigVectors[:, 1].reshape(N, 1)
 #crea la matriz de proyeccion sobre el sistema de coordenadas PC1, PC2
-A = np.hstack((PC1, PC2))
+A = np.hstack((np.copy(PC1), np.copy(PC2)))
+#crea dos arreglos de 3 strings para encontrar los parametros mas importantes en cada componente principal
+comp1 = ["", "", ""]
+comp2 = ["", "", ""]
+n1 = 0
+n2 = 0
+#encuentra los tres parametros mas importantes en PC1 y PC2
+while n1 < 3 and n2 < 3:
+    for i in range(PC1.size):
+        if PC1[i] == np.amax(PC1):
+            comp1[n1] = nombres[i]
+            PC1 = np.delete(PC1, i)
+            n1+=1
+            break
+    for i in range(PC2.size):
+        if PC2[i] == np.amax(PC2):
+            comp2[n2] = nombres[i]
+            PC2 = np.delete(PC2, i)
+            n2+=1
+            break
+
+print("\nParametros mas importantes en PC1: ", comp1[0], comp1[1], comp1[2])
+print("Parametros mas importantes en PC2: ", comp2[0], comp2[1], comp2[2])
+print("\n")
+
 #proyecta los datos al sistema de coordenadas PC1, PC2
 datos_proy = np.matmul(parametros, A)
 cM = 0#contador de diagnostico maligno
