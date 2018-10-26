@@ -31,7 +31,7 @@ eigValues, eigVectors = np.linalg.eig(Mcov)#obtiene los vectores y valores propi
 print("\n")
 for i in range(eigValues.size):#imprime los valores propios y sus correspondientes vectores propios
     print("valor propio",i+1, ":", eigValues[i])
-    print("vector propio",i+1,":", eigVectors[i])
+    print("vector propio",i+1,":\n", eigVectors[:, i].reshape(N, 1))
     print("\n")
 
 #ordena valores propios y sus correspondientes vectores propios
@@ -50,6 +50,7 @@ for i in range(eigValues.size):
             numeros[j] = temp_num
 print("\n")#imprime los dos vectores propios correspondientes a los dos mayores valores propios
 print("Componente principal 1: vector", numeros[0], "= \n", eigVectors[:, 0].reshape(N, 1), " correspondiente al valor propio", eigValues[0], " y al parametro ", nombres[numeros[0]-1])
+print("\n")
 print("Componente principal 2: vector", numeros[1], "= \n", eigVectors[:, 1].reshape(N, 1), " correspondiente al valor propio", eigValues[1], " y al parametro ", nombres[numeros[1]-1])
 print("\n")
 #guarda los componentes principales en sus propias variables
