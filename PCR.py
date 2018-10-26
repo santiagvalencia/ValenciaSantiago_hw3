@@ -30,8 +30,8 @@ eigValues, eigVectors = np.linalg.eig(Mcov)#obtiene los vectores y valores propi
 
 print("\n")
 for i in range(eigValues.size):#imprime los valores propios y sus correspondientes vectores propios
-    print("valor propio",i+1, ":", eigValues[i])
-    print("vector propio",i+1,":\n", eigVectors[:, i].reshape(N, 1))
+    print("valor propio "+ str(i+1) + ": " + str(eigValues[i]))
+    print("vector propio "+str(i+1)+":\n"+ str(eigVectors[:, i].reshape(N, 1)))
     print("\n")
 
 #ordena valores propios y sus correspondientes vectores propios
@@ -49,9 +49,9 @@ for i in range(eigValues.size):
             eigVectors[:, j] = temp_vect
             numeros[j] = temp_num
 print("\n")#imprime los dos vectores propios correspondientes a los dos mayores valores propios
-print("Componente principal 1: vector", numeros[0], "= \n", eigVectors[:, 0].reshape(N, 1), " correspondiente al valor propio", eigValues[0])
+print("Componente principal 1: vector " + str(numeros[0]) + " = \n" + str(eigVectors[:, 0].reshape(N, 1)) + " correspondiente al valor propio " + str(eigValues[0]))
 print("\n")
-print("Componente principal 2: vector", numeros[1], "= \n", eigVectors[:, 1].reshape(N, 1), " correspondiente al valor propio", eigValues[1])
+print("Componente principal 2: vector " +str(numeros[1])+ " = \n" + str(eigVectors[:, 1].reshape(N, 1)) + " correspondiente al valor propio " +str(eigValues[1]))
 print("\n")
 #guarda los componentes principales en sus propias variables
 PC1 = eigVectors[:, 0].reshape(N, 1)
@@ -78,8 +78,8 @@ while n1 < 3 and n2 < 3:
             n2+=1
             break
 
-print("\nParametros mas importantes en PC1: ", comp1[0], comp1[1], comp1[2])
-print("Parametros mas importantes en PC2: ", comp2[0], comp2[1], comp2[2])
+print("\nParametros mas importantes en PC1: " + str(comp1[0]) +", "+ str(comp1[1])+", "+str(comp1[2]))
+print("Parametros mas importantes en PC2: "+str(comp2[0])+", "+str(comp2[1])+", "+str(comp2[2]))
 print("\n")
 
 #proyecta los datos al sistema de coordenadas PC1, PC2
