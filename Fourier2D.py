@@ -8,20 +8,29 @@ img = plt.imread("arbol.png")
 img_FT = np.abs(np.real(fft2(img)))
 plt.imshow(img_FT, norm = LogNorm(vmin = 1), cmap = "hot")
 plt.colorbar(label = "Transformada 2D de Fourier")
+plt.title("Transformada de Fourier de la imagen")
 plt.show()
 plt.close("all")
 
 #el ruido se ve como unos cuantos puntos con valores altos (>10**2.5)
 #por eso el filtro debe ser pasabajas
-for i in range(img_FT[:, 0].size):
-    for j in range(img_FT[0].size):
-        if img_FT[i, j] >= 10.0**2.5:
-            img_FT[i, j] = 0
+img_FT_filtro = np.copy(img_FT)
+for i in range(img_FT_filtro[:, 0].size):
+    for j in range(img_FT_filtro[0].size):
+        if img_FT_filtro[i, j] >= 10.0**3.5:
+            img_FT_filtro[i, j] = 10.0**1.5
+            print("o")
 
-img_filtrada = np.abs(np.real(ifft2(img_FT)))
-plt.imshow(img_filtrada, cmap = "gray")
+plt.imshow(img_FT_filtro, norm = LogNorm(vmin = 1), cmap = "hot")
+plt.colorbar(label = "Transformada 2D de Fourier")
+plt.title("Transformada de Fourier filtrada")
 plt.show()
 plt.close("all")
+
+img_filtrada = np.real(ifft2(img_FT_filtro))
+plt.imshow(img_filtrada)
+plt.show()
+
 
 
 #plt.imshow(img, cmap = "gray")
