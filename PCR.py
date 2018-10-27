@@ -54,8 +54,8 @@ print("\n")
 print("Componente principal 2: vector " +str(numeros[1])+ " = \n" + str(eigVectors[:, 1].reshape(N, 1)) + " correspondiente al valor propio " +str(eigValues[1]))
 print("\n")
 #guarda los componentes principales en sus propias variables
-PC1 = eigVectors[:, 0].reshape(N, 1)
-PC2 = eigVectors[:, 1].reshape(N, 1)
+PC1 = np.copy(eigVectors[:, 0].reshape(N, 1))
+PC2 = np.copy(eigVectors[:, 1].reshape(N, 1))
 #crea la matriz de proyeccion sobre el sistema de coordenadas PC1, PC2
 A = np.hstack((np.copy(PC1), np.copy(PC2)))
 #crea dos arreglos de 3 strings para encontrar los parametros mas importantes en cada componente principal
@@ -93,15 +93,15 @@ cM = 0#contador de diagnostico maligno
 cB = 0#contador de diagnostico benigno
 for i in range(datos_proy[:, 0].size):#recorre los datos proyectados
     if diagnosticos_str[i] == "B":#si el dato es benigno lo colorea de verde
-        if cM == 0:#si no se ha encontrado un dato benigno crea el label correspondiente
+        if cB == 0:#si no se ha encontrado un dato benigno crea el label correspondiente
             plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "green", alpha = 0.3, label = "Benigno", marker = "+")
-            cM+=1
-        else: plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "green", alpha = 0.3, marker = "+")
-    else:#si el dato es maligno lo colorea de rojo
-        if cB == 0:#si no se ha encontrado un dato maligno crea el label correspondiente
-            plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "red", alpha = 0.3, label = "Maligno", marker = "+")
             cB+=1
-        else: plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "red", alpha = 0.3, marker = "+")
+        else: plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "green", alpha = 0.3, marker = "+"); cB+=1
+    else:#si el dato es maligno lo colorea de rojo
+        if cM == 0:#si no se ha encontrado un dato maligno crea el label correspondiente
+            plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "red", alpha = 0.3, label = "Maligno", marker = "+")
+            cM+=1
+        else: plt.scatter(datos_proy[i, 0], datos_proy[i, 1], color = "red", alpha = 0.3, marker = "+"); cM+=1
 x = np.linspace(-5, 10, 100)
 plt.plot(x, 1.5*x-0.5, linestyle = "--", color = "grey")
 plt.legend()
