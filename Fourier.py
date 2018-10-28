@@ -26,7 +26,7 @@ def FT(g):#funcion que implementa la TDF de una funcion g
     for ni in range(n): #recorre el primer indice
         sum = 0 #inicializa la suma en 0
         for ki in range(k): #recorre el segundo indice
-            sum += g[ki]*np.exp(1j*2.0*np.pi*ki*ni/N) #suma segun la formula de TDF
+            sum += g[ki]*np.exp(-1j*2.0*np.pi*ki*ni/N) #suma segun la formula de TDF
         G[ni] = sum #incorpora el resultado al arreglo de la transformada
     return G #retorna el arreglo de la transformada
 
@@ -59,7 +59,7 @@ def IFT(G): #funcion que encuentra la transformada inversa de Fourier de una fun
     for ni in range(n): #recorre el primer indice de la suma
         sum = 0 #inicializa el sumador en 0
         for ki in range(k): #recorre el segundo indice de la suma
-            sum += G[ki]*np.exp(-1j*2.0*np.pi*ki*ni/N) #suma segun la formula de la transformada inversa de Fourier
+            sum += G[ki]*np.exp(1j*2.0*np.pi*ki*ni/N) #suma segun la formula de la transformada inversa de Fourier
         g[ni] = sum #incorpora el resultado al arreglo de la transformada inversa
     g/=N #normaliza la transformada inversa segun el numero de datos
     return g #retorna la transformada inversa
@@ -87,7 +87,6 @@ def pasabajas(G, freq, fc): #funcion que toma un arreglo en dominio de Fourier, 
     for i in range(freq.size):#recorre las frecuencias
         if np.fabs(freq[i]) >= fc: #si la frecuencia es mayor a la frecuencia de corte, se anula el dato correspondiente en el arreglo en dominio de Fourier
             G2[i] = 0
-
     g2 = IFT(G2) #se invierte la senal filtrada para obtener la senal en dominio de tiempo
 
     return g2 #retorna la senal filtrada en dominio de tiempo
