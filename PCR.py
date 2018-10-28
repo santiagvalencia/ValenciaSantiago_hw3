@@ -68,14 +68,12 @@ while n1 < 3 and n2 < 3:
     for i in range(PC1.size):
         if PC1[i] == np.amax(PC1):
             comp1[n1] = nombres[i]
-            print("1", nombres[i], i)
             PC1[i] = 0
             n1+=1
             break
     for j in range(PC2.size):
         if PC2[j] == np.amax(PC2):
             comp2[n2] = nombres[j]
-            print("2", nombres[j], j)
             PC2[j] = 0
             n2+=1
             break
