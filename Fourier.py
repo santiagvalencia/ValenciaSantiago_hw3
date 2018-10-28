@@ -79,7 +79,7 @@ plt.close("all")
 print("Frecuencias principales:")
 G_real = np.real(G)
 for i in range(G_real.size):
-    if np.fabs(G_real[i]) >= 200 and freq[i]>=0: #se tomo el rango de frecuencias principales como aquellas en las que la transformada tuviera un valor mayor o igual a 200
+    if np.fabs(G_real[i]) >= 180 and freq[i]>=0: #se tomo el rango de frecuencias principales como aquellas en las que la transformada tuviera un valor mayor o igual a 180
         print (freq[i], " Hz")
 
 def pasabajas(G, freq, fc): #funcion que toma un arreglo en dominio de Fourier, sus frecuencias correspondientes y una frecuencia de corte y retorna un arreglo en dominio de tiempo filtrado (con pasabajas)
