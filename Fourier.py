@@ -45,7 +45,9 @@ def frecuencias(n, dt): #funcion que encuentra las frecuencias correspondientes 
         freq = np.zeros((int)((n-1)/2+1)) #crea un arreglo de tamano (n-1)/2 +1
         for i in range((int)((n-1)/2+1)): #llena el arreglo con su posicion correspondiente para la primera mitad
                 freq[i] = i
-        freq = np.append(freq, -np.flip(freq[1:]))#la segunda mitad del arreglo es el "reflejo negativo" de la primera mitad
+		
+
+        freq = np.append(freq, -freq[1:][::-1])#la segunda mitad del arreglo es el "reflejo negativo" de la primera mitad
 
     freq/=(dt*n) #divide entre dt*n segun la documentacion de ifft
 
@@ -80,7 +82,7 @@ print("Frecuencias principales:")
 G_real = np.real(G)
 for i in range(G_real.size):
     if np.fabs(G_real[i]) >= 180 and freq[i]>=0: #se tomo el rango de frecuencias principales como aquellas en las que la transformada tuviera un valor mayor o igual a 180
-        print (freq[i], " Hz")
+        print (str(freq[i])+ " Hz")
 
 def pasabajas(G, freq, fc): #funcion que toma un arreglo en dominio de Fourier, sus frecuencias correspondientes y una frecuencia de corte y retorna un arreglo en dominio de tiempo filtrado (con pasabajas)
     G2 = np.copy(G) #copia el arreglo original
@@ -133,7 +135,7 @@ for p in plots:
 plt.savefig("ValenciaSantiago_TF_Interpola.pdf")
 plt.close("all")
 
-print("\nLas transformadas de los datos interpolados tienen un mayor ruido en las zonas de alta frecuencia. Ademas, los picos presentes en la frecuencia de 385 Hz en la transformada de signal.dat se encuentran suavizados en las interpolaciones.\n")
+print("\nLas transformadas de los datos interpolados tienen un mayor ruido en las zonas de alta frecuencia, sobre todo la cuadratica. Ademas, los picos presentes en la frecuencia de 385 Hz en la transformada de signal.dat se encuentran suavizados en las interpolaciones.\n")
 #filtra las interpolaciones con pasabajas de 1000 Hz (los datos de signal.dat ya se habian filtrado en el arreglo signal_filtrado)
 cuad_pasabajas_1000 = pasabajas(transf_cuad, frec_interp, 1000)
 cub_pasabajas_1000 = pasabajas(transf_cub, frec_interp, 1000)
