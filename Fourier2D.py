@@ -20,7 +20,7 @@ img_FT_filtro = np.copy(img_FT)#copia la transformada y la recorre
 for i in range(img_FT_filtro[:, 0].size):
     for j in range(img_FT_filtro[0].size):
         if np.abs(np.real(img_FT[i, j])) >= 10.0**3.3: #si el valor de la transformada es mayor a 10**3.3 este valor pasa a 0, lo que efectivamente elimina las frecuencias correspondientes a los picos de ruido
-            img_FT_filtro[i, j] = 0
+            img_FT_filtro[i, j] = 0.01
 plt.imshow(np.abs(np.real(fftshift(img_FT_filtro))), norm = LogNorm(vmin = 3), cmap = "hot")
 plt.colorbar(label = "Transformada 2D de Fourier")
 plt.title("Transformada de Fourier filtrada (shifted)")
